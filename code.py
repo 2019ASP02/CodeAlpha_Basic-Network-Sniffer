@@ -18,3 +18,14 @@ def sniffer:
         print("Unsupported platform.")
         sys.exit(1)
     return sniffer_socket
+
+def parse_packet(packet):
+    eth_header = packet[:14]
+    eth_data = struct.unpack("!6s6sH",eth_header)
+    eth_protocol = socket.ntohs(eth_data[2])
+    packet_type = "IPv4" if eth_protocol == 8 else "Other"
+
+    if eth_protocol == 8:
+        ip_header = packet[14:34]
+        iph = struct.unpack('!BBHHHBBH4s4s',ip_header)
+        version
