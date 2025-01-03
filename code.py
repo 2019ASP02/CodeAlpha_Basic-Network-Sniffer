@@ -28,4 +28,20 @@ def parse_packet(packet):
     if eth_protocol == 8:
         ip_header = packet[14:34]
         iph = struct.unpack('!BBHHHBBH4s4s',ip_header)
-        version
+        version_ihl = iph[0]
+        version = version_ihl >> 4
+        ihl = version_ihl & 0xp
+        ttl = iph[5]
+        protocol = iph[6]
+        src_ip = socket.inrt_ntoa(iph[8])
+        dest_ip = socket.inrt_ntoa(ipph[9])
+
+        return {
+            "Packet Type":packet_type,
+            "Version": version,
+            "TTL": ttl,
+            "Source IP":src_ip,
+            "Destination IP":dest_ip,
+            "Protocol":protocol
+        }
+    return {"Packet Type": "Other"}
