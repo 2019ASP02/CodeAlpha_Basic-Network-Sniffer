@@ -30,11 +30,11 @@ def parse_packet(packet):
         iph = struct.unpack('!BBHHHBBH4s4s',ip_header)
         version_ihl = iph[0]
         version = version_ihl >> 4
-        ihl = version_ihl & 0xp
+        ihl = version_ihl & 0xF
         ttl = iph[5]
         protocol = iph[6]
-        src_ip = socket.inrt_ntoa(iph[8])
-        dest_ip = socket.inrt_ntoa(ipph[9])
+        src_ip = socket.inet_ntoa(iph[8])
+        dest_ip = socket.inet_ntoa(ipph[9])
 
         return {
             "Packet Type":packet_type,
@@ -45,3 +45,22 @@ def parse_packet(packet):
             "Protocol":protocol
         }
     return {"Packet Type": "Other"}
+
+def main():
+    try:
+        sniffer_socket = sniffer()
+        print("Listening For packets...\n")
+        while True:
+            raw_packet,_ = sniffer_socket.recvfrom(65535)
+            parsed = parse_packet(raw_packet)
+            print(parsed)
+    except KeyboardInterrupt:
+        print("\nStopping sniffer.")
+        if os.name == 'nt':
+            sniffer_socket.ioctl(socket.SIO_RCVALL, socket.RCVALL_OFF)
+    except Exception as e:
+        print(f"Error: {e}")
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()
