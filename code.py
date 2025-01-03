@@ -34,7 +34,7 @@ def parse_packet(packet):
         ttl = iph[5]
         protocol = iph[6]
         src_ip = socket.inet_ntoa(iph[8])
-        dest_ip = socket.inet_ntoa(ipph[9])
+        dest_ip = socket.inet_ntoa(iph[9])
 
         return {
             "Packet Type":packet_type,
